@@ -1,67 +1,78 @@
-body {
-    font-family: Arial, sans-serif;
-    background: #f4f6f8;
-    padding: 20px;
+// 🔹 Firebase SDK
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } 
+from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
+
+// 🔹 Firebase config (của bạn)
+const firebaseConfig = {
+  apiKey: "AIzaSyC2zHThwSFD5wuL05Z6YHpV7airXGttX0s",
+  authDomain: "kythi-5d96a.firebaseapp.com",
+  projectId: "kythi-5d96a",
+  storageBucket: "kythi-5d96a.firebasestorage.app",
+  messagingSenderId: "454511132449",
+  appId: "1:454511132449:web:756c4f70c2415f943e4860"
+};
+
+// 🔹 Init Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// 🔹 DOM
+const tableBody = document.getElementById("tableBody");
+const addBtn = document.getElementById("addBtn");
+
+// 🔹 Load dữ liệu
+async function loadStudents() {
+    tableBody.innerHTML = "";
+    const querySnapshot = await getDocs(collection(db, "students"));
+    querySnapshot.forEach((docSnap) => {
+        const s = docSnap.data();
+        addRow(docSnap.id, s);
+    });
 }
 
-h1 {
-    text-align: center;
-    color: #333;
+// 🔹 Thêm dòng
+function addRow(id, s) {
+    const avg = ((s.math + s.physics + s.chemistry) / 3).toFixed(2);
+    const row = `
+        <tr>
+            <td>${s.name}</td>
+            <td>${s.math}</td>
+            <td>${s.physics}</td>
+            <td>${s.chemistry}</td>
+            <td>${avg}</td>
+            <td>
+                <button class="delete" onclick="deleteStudent('${id}')">X</button>
+            </td>
+        </tr>
+    `;
+    tableBody.innerHTML += row;
 }
 
-.form {
-    max-width: 600px;
-    margin: auto;
-    background: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
+// 🔹 Thêm sinh viên
+addBtn.onclick = async () => {
+    const name = document.getElementById("name").value;
+    const math = Number(document.getElementById("math").value);
+    const physics = Number(document.getElementById("physics").value);
+    const chemistry = Number(document.getElementById("chemistry").value);
 
-input {
-    width: 100%;
-    padding: 10px;
-    margin: 8px 0;
-}
+    if (!name || isNaN(math) || isNaN(physics) || isNaN(chemistry)) {
+        alert("Nhập đầy đủ thông tin!");
+        return;
+    }
 
-button {
-    width: 100%;
-    padding: 10px;
-    background: #007bff;
-    color: white;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-}
+    await addDoc(collection(db, "students"), {
+        name, math, physics, chemistry
+    });
 
-button:hover {
-    background: #0056b3;
-}
+    loadStudents();
+};
 
-table {
-    width: 100%;
-    margin-top: 20px;
-    border-collapse: collapse;
-}
+// 🔹 Xóa sinh viên
+window.deleteStudent = async (id) => {
+    await deleteDoc(doc(db, "students", id));
+    loadStudents();
+};
 
-table, th, td {
-    border: 1px solid #ccc;
-}
-
-th, td {
-    padding: 10px;
-    text-align: center;
-}
-
-th {
-    background: #007bff;
-    color: white;
-}
-
-.delete {
-    background: red;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    cursor: pointer;
-}
+// 🔹 Load khi mở trang
+loadStudents();
