@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản Lý Điểm Sinh Viên</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .form {
+            max-width: 600px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background: #007bff;
+            color: white;
+        }
+        .delete {
+            background: red;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<h1>📊 Quản Lý Điểm Sinh Viên</h1>
+
+<div class="form">
+    <input type="text" id="name" placeholder="Tên sinh viên">
+    <input type="number" id="math" placeholder="Điểm Toán">
+    <input type="number" id="physics" placeholder="Điểm Lý">
+    <input type="number" id="chemistry" placeholder="Điểm Hóa">
+    <button onclick="addStudent()">Thêm sinh viên</button>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Tên</th>
+                <th>Toán</th>
+                <th>Lý</th>
+                <th>Hóa</th>
+                <th>TB</th>
+                <th>Xóa</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+    </table>
+</div>
+
+<script>
+    function addStudent() {
+        const name = document.getElementById("name").value;
+        const math = parseFloat(document.getElementById("math").value);
+        const physics = parseFloat(document.getElementById("physics").value);
+        const chemistry = parseFloat(document.getElementById("chemistry").value);
+
+        if (!name || isNaN(math) || isNaN(physics) || isNaN(chemistry)) {
+            alert("Vui lòng nhập đầy đủ thông tin!");
+            return;
+        }
+
+        const avg = ((math + physics + chemistry) / 3).toFixed(2);
+
+        const row = `
+            <tr>
+                <td>${name}</td>
+                <td>${math}</td>
+                <td>${physics}</td>
+                <td>${chemistry}</td>
+                <td>${avg}</td>
+                <td><button class="delete" onclick="this.parentElement.parentElement.remove()">X</button></td>
+            </tr>
+        `;
+
+        document.getElementById("tableBody").innerHTML += row;
+
+        document.getElementById("name").value = "";
+        document.getElementById("math").value = "";
+        document.getElementById("physics").value = "";
+        document.getElementById("chemistry").value = "";
+    }
+</script>
+
+</body>
+</html>
