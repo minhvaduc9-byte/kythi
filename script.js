@@ -1,33 +1,61 @@
-function addStudent() {
-    const name = document.getElementById("name").value;
-    const math = parseFloat(document.getElementById("math").value);
-    const physics = parseFloat(document.getElementById("physics").value);
-    const chemistry = parseFloat(document.getElementById("chemistry").value);
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f8;
+    padding: 20px;
+}
 
-    if (!name || isNaN(math) || isNaN(physics) || isNaN(chemistry)) {
-        alert("Vui lòng nhập đầy đủ thông tin!");
-        return;
-    }
+h1 {
+    text-align: center;
+}
 
-    const avg = ((math + physics + chemistry) / 3).toFixed(2);
+.form {
+    max-width: 650px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+}
 
-    const row = `
-        <tr>
-            <td>${name}</td>
-            <td>${math}</td>
-            <td>${physics}</td>
-            <td>${chemistry}</td>
-            <td>${avg}</td>
-            <td>
-                <button class="delete" onclick="this.parentElement.parentElement.remove()">X</button>
-            </td>
-        </tr>
-    `;
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 6px 0;
+}
 
-    document.getElementById("tableBody").innerHTML += row;
+button {
+    width: 100%;
+    padding: 10px;
+    background: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
 
-    document.getElementById("name").value = "";
-    document.getElementById("math").value = "";
-    document.getElementById("physics").value = "";
-    document.getElementById("chemistry").value = "";
+table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid #ccc;
+}
+
+th, td {
+    padding: 8px;
+    text-align: center;
+}
+
+th {
+    background: #007bff;
+    color: white;
+}
+
+.delete {
+    background: red;
+    color: white;
+    border: none;
+    padding: 5px 8px;
+    cursor: pointer;
 }
